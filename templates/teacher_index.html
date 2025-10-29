@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>Кабінет викладача</h1>
+<div class="btn-row">
+  <a class="btn" href="{{ url_for('teacher_new') }}">Створити завдання</a>
+  <a class="btn" href="{{ url_for('subjects_page') }}">Предмети</a>
+  <a class="btn" href="{{ url_for('groups_page') }}">Групи</a>
+</div>
+{% if submissions is not none %}
+  <div class="card">
+    <h3>Відповіді студентів</h3>
+    {% for s in submissions %}
+      <div class="card">
+        <div><b>{{ s.username }}</b></div>
+        <div>{{ s.note }}</div>
+        {% if s.filename %}<div><a href="{{ url_for('download_submission', aid=s.id, username=s.username, fname=s.filename) }}">Файл</a></div>{% endif %}
+        <div class="muted">{{ s.submitted_at_str }}</div>
+      </div>
+    {% else %}<i>Немає відповідей</i>{% endfor %}
+    <p><a class="btn" href="{{ url_for('teacher_home') }}">Назад</a></p>
+  </div>
+{% else %}
+  {% for t in tasks %}
+    <div class="card">
+      <div><b>№{{ t.number }} — {{ t.title }}</b> <span class="badge">{{ t.subject_name }}</span></div>
+      <div class="muted">Група: {{ t.group_name }} • {{ t.created_at_str }}</div>
+      <div>{{ t.description }}</div>
+      {% if t.attachment %}<div><a href="{{ url_for('download_attachment', aid=t.id, fname=t.attachment) }}">Додаток</a></div>{% endif %}
+      <div><a class="btn" href="{{ url_for('teacher_submissions', aid=t.id) }}">Відповіді ({{ t.submissions_count or 0 }})</a></div>
+    </div>
+  {% else %}<i>Ще немає завдань</i>{% endfor %}
+{% endif %}
+{% endblock %}
