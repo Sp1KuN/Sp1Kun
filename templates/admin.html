@@ -1,0 +1,38 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>Адмін-панель</h1>
+<div class="card">
+  <form method="post" class="form">
+    <div class="row row-2">
+      <div><label>Логін</label><input class="input" name="username" required></div>
+      <div><label>Пароль</label><input class="input" name="password" required></div>
+    </div>
+    <div class="row">
+      <div><label>Роль</label>
+        <select class="input" name="role" required>
+          <option value="teacher">teacher</option>
+          <option value="student">student</option>
+          <option value="admin">admin</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit">Додати</button>
+  </form>
+</div>
+<div class="card table-wrap">
+  <table class="table">
+    <tr><th>Логін</th><th>Роль</th><th>Дії</th></tr>
+    {% for u in users %}<tr>
+<td>{{ u.username or u['username'] }}</td>
+<td>{{ u.role or u['role'] }}</td>
+<td>
+  <form method="post" style="display:inline" onsubmit="return confirm('Видалити користувача {{ u.username }}?')">
+    <input type="hidden" name="delete_username" value="{{ u.username }}">
+    <button class="btn" type="submit">Видалити</button>
+  </form>
+</td>
+</tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

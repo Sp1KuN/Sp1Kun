@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>Групи</h1>
+<div class="card">
+  <form method="post">
+    <label>Назва групи</label>
+    <input class="input" name="name" required>
+    <div class="form-actions">
+      <button class="btn" type="submit">Створити</button>
+    </div>
+  </form>
+</div>
+{% for g in groups %}
+  <div class="card">
+    <div class="item-row">
+      <div class="item-title">{{ g.name }}</div>
+      <div class="item-meta">{{ g.created_at_str }}</div>
+      <div><a class="btn" href="{{ url_for('group_detail', gid=g.id) }}">Керувати</a></div>
+    </div>
+  </div>
+{% else %}
+  <i>Немає груп</i>
+{% endfor %}
+{% endblock %}
